@@ -6,6 +6,7 @@ print (a[2][1])
 print (a[2][2])
 #dsfsddsffds
 print("adios mundo real ")
+print("SE CAMBIO DE RAMMA")
 for j in range(len(a[2])):
             pc1=int(input("pc1: "))
             a[2][j][0]=pc1

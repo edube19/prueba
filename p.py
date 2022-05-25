@@ -5,6 +5,7 @@ print (a[2][0][0])
 print (a[2][1])
 print (a[2][2])
 #dsfsddsffds
+print("adios mundo")
 for j in range(len(a[2])):
             pc1=int(input("pc1: "))
             a[2][j][0]=pc1

@@ -62,8 +62,8 @@ while (contador!=len(lista_secciones)):
 """
 while(condicion!=0 or contador!=len(lista_secciones)):
     #nombre_seccion=input("Ponga el nombre/número de la seccion a poner notas: ") 
-    for x in range(cantidad_secciones):
-        nombre_seccion=input("Ponga el nombre/número de la seccion a poner notas: ")  
+    nombre_seccion=input("Ponga el nombre/número de la seccion a poner notas: ")
+    for x in range(cantidad_secciones):    
         if (nombre_seccion == lista_secciones[x].nseccion):  
             print(lista_secciones[x].nseccion)
             if(lista_secciones[x].nseccion not in vacio):
@@ -94,14 +94,13 @@ while(condicion!=0 or contador!=len(lista_secciones)):
                 condicion=int(input("Desea poner datos de otra seccion (1→SI / 0→NO):"))
                 contador=len(lista_secciones)
             else:
-                print("Los datos de la seccion "+nombre_seccion+" ya fueron ingresadas") 
+                print("Los datos de la seccion "+nombre_seccion+" ya fueron ingresadas")
                 contador=len(lista_secciones)
-                condicion=int(input("Desea poner datos de otra seccion (1→SI / 0→NO):"))
+                #condicion=int(input("Desea poner datos de otra seccion (1→SI / 0→NO):"))
         else:
-            contador+1==len(lista_secciones)
-            print("La seccion no existe")
-            condicion=int(input("Desea poner datos de otra seccion (1→SI / 0→NO):"))
-            break
+            if ((x+1)==len(lista_secciones)):
+                print("La seccion no existe")
+                condicion=int(input("Desea poner datos de otra seccion (1→SI / 0→NO):"))
             #continuar_secciones=int(input(" ¿Ingresar datos de otra seccion? (1→SI / 0→NO) "))
 
 """n=1

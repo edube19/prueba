@@ -4,13 +4,24 @@
 from asyncio.windows_events import NULL
 from distutils.log import info
 from pickle import APPEND
+import os
+import time
 lista_secciones=[]
 
-def crear_seccion(lista_secciones):
+def validacion_confirmación(condicion):
+    lista_condicion=['0','1']
+    if (condicion not in lista_condicion):
+        print("Ingrese solo 0(NO) o 1(SI)")
+        condicion_nuevo=input("Ingrese nuevamente 0(NO) o 1(SI): ")
+        validacion_confirmación(condicion_nuevo)
+    else:
+        return condicion
+
+def crear_seccion(lista_secciones,lista_nombre_secciones):
     print("-----Creando secciones-----")
-    lista_nombre_secciones=[]
-    cond=1
-    while(cond!=0):
+    #lista_nombre_secciones=[]
+    cond='1'
+    while(cond!='0'):
         #while True:
         nombre_seccion=input("Ingrese el nombre/número de la seccion: ")    
         if (nombre_seccion in lista_nombre_secciones):
@@ -21,12 +32,13 @@ def crear_seccion(lista_secciones):
             profesor=input("Ingrese el profesor de la seccion: ")
             lista_secciones.append(Seccion(nombre_seccion,curso,profesor))
             print("Seccion creada")
-        cond=int(input("Desea agregar otra seccion (1→SI / 0→NO):"))
-            
+        condicion=input("Desea agregar otra seccion (1→SI / 0→NO):")
+        cond=validacion_confirmación(condicion)    
+
 def buscar_seccion(lista_secciones):
-    condicion=1
+    condicion='1'
     contador=0
-    while(condicion!=0):
+    while(condicion!='0'):
         nombre_seccion=input("Ponga el nombre/número de la seccion a buscar: ")
         for x in range(len(lista_secciones)):
             if nombre_seccion == lista_secciones[x].nseccion:
@@ -37,8 +49,30 @@ def buscar_seccion(lista_secciones):
                 contador=x
                 if ((contador+1)==len(lista_secciones)):
                     print("La seccion no existe")
-                    condicion=int(input("Desea buscar otra seccion (1→SI / 0→NO):"))
-        
+                    cond=input("Desea buscar otra seccion (1→SI / 0→NO):")
+                    condicion=validacion_confirmación(cond)
+
+def eliminar_seccion(lista_secciones,lista_nombre_secciones):
+    condicion='1'
+    contador=0
+    while(condicion!='0'):
+        nombre_seccion=input("Ponga el nombre/número de la seccion a eliminar: ")
+        for x in range(len(lista_secciones)):
+            if nombre_seccion == lista_secciones[x].nseccion:
+                print("Seccion a eliminar: ",nombre_seccion)
+                lista_secciones.pop(x)
+                lista_nombre_secciones.remove(nombre_seccion)
+                print("Se elimino la seccion: "+nombre_seccion)
+                cond=input("Desea buscar otra seccion (1→SI / 0→NO):")
+                condicion=validacion_confirmación(cond)
+                break
+            else:
+                contador=x
+                if ((contador+1)==len(lista_secciones)):
+                    print("La seccion no existe")
+                    cond=input("Desea buscar otra seccion (1→SI / 0→NO):")
+                    condicion=validacion_confirmación(cond)
+
 def ver_secciones(lista_secciones):
     print("Lista de secciones")
     for x in range(len(lista_secciones)):
@@ -46,7 +80,7 @@ def ver_secciones(lista_secciones):
     return len(lista_secciones) 
 
 class Seccion:
-    #[[alumnos],[notas],[nota final],[identificador_alumno]]
+    
     notas_max_min=[[]]#[alumno][1]→ nota menor,[alumno][0]→ nota mayor .Lista de la mejor/menor nota de cada alumno
     notas_min_pc=[]#la pc mas baja de cada alumno
     
@@ -54,14 +88,15 @@ class Seccion:
         self.nseccion=nseccion
         self.curso=curso
         self.profesor=profesor
-        self.info_alumnos=[[],[],[]]#para que pertenesca a este
+        self.info_alumnos=[[],[],[]]#para que pertenesca a este,[[alumnos],[notas],[nota final]]
         self.notas_min_pc=[]
+        self.lista_nombres=[]
     
-    def agregar_alumno(self,info_alumnos,curso,nseccion):
+    def agregar_alumno(self,info_alumnos,curso,nseccion,lista_nombres):
         print("Seccion ",nseccion)
-        lista_nombres=[]#guarda los nombres de todos los alumnos
-        cond=1
-        while(cond!=0):
+        #lista_nombres=[]#guarda los nombres de todos los alumnos
+        cond='1'
+        while(cond!='0'):
             nombre_valido=0#si es cero seguira pidiendo el nombre
             while(nombre_valido==0):
                 nombreAlumno=input("Nombre del alumno a ingresar: ")
@@ -75,25 +110,42 @@ class Seccion:
                 lista_nombres.append(nombreAlumno)
                 info_alumnos[0].append(Alumno(nombreAlumno,nseccion,curso))#poner al final en la lista de alumnos
                 print("Se agrego al alumno: "+nombreAlumno)
-            cond=int(input("Desea agregar otro alumno (1→SI / 0→NO):"))
+            condicion=input("Desea agregar otro alumno (1→SI / 0→NO):")
+            cond=validacion_confirmación(condicion)
 
-    def quitar_alumno(self,info_alumnos):
-        cond=1
-        while(cond!=0):
-            nombreAlumno=input("Nombre del alumno a eliminar: ")
-            if nombreAlumno in info_alumnos[0]:
-                info_alumnos[0].remove(nombreAlumno)
-                print("Se elimino al alumno: "+nombreAlumno)
-            else:
-                print("Ya no existe ese alumno")
-            cond=input("Desea eiminar otro alumno (1→SI / 0→NO):")
-            if cond==0:
-                break
+    def quitar_alumno(self,info_alumnos,lista_nombres,posicion,lista_secciones):
+        condicion='1'
+        while(condicion!='0'):
+            nombre_valido=0#si es cero seguira pidiendo el nombre
+            while(nombre_valido==0):
+                nombreAlumno=input("Nombre del alumno a eliminar: ")
+                if nombreAlumno.isalpha():
+                    nombre_valido=1#se ingreso un nombre valido (solo letras)
+                else:
+                    print("Ingrese solo nombres")
+            for x in range(len(lista_secciones[posicion].info_alumnos[0])):
+                if nombreAlumno == lista_secciones[posicion].info_alumnos[0][x].nombre:
+                    continuar=input("Alumno a eliminar: "+nombreAlumno+" ¿Continuar? (1→SI / 0→NO)")
+                    continuar_condicion=validacion_confirmación(continuar)
+                    if (continuar_condicion=='1'):
+                        info_alumnos[0].pop(x)
+                        lista_nombres.remove(nombreAlumno)
+                        print("Se elimino de la seccion"+lista_secciones[posicion].nseccion+"al alumno: "+nombreAlumno)
+                    cond=input("Desea buscar eliminar otro alumno (1→SI / 0→NO):")
+                    condicion=validacion_confirmación(cond)
+                    break
+                else:
+                    contador=x
+                    if ((contador+1)==len(lista_secciones[posicion].info_alumnos[0])):
+                        print("El alumno no pertenece a la seccion",lista_secciones[posicion].nseccion)
+                        cond=input("Desea buscar eliminar otro alumno (1→SI / 0→NO):")
+                        condicion=validacion_confirmación(cond)          
 
-    def ver_lista(self,info_alumnos,nseccion):
+    def ver_lista(self,info_alumnos,nseccion,posicion,lista_secciones):
         print("Lista de alumnos de la seccion "+str(nseccion)+": ")
-        for x in range(len(info_alumnos[0])):
-            print("Alumno n° "+str(x+1)+" : "+info_alumnos[0][x].nombre)
+        print("total alumnos de la seccin "+nseccion+" : "+str(len(lista_secciones[posicion].info_alumnos[0])))
+        for x in range(len(lista_secciones[posicion].info_alumnos[0])):
+            print("Alumno n° "+str(x+1)+" : "+lista_secciones[posicion].info_alumnos[0][x].nombre)
         return len(info_alumnos[0])
 
     def mayor_nota(self,info_alumnos):
@@ -188,6 +240,7 @@ class Seccion:
                                     validacion_nota=1
                                 else:
                                     print("Nota no valida, debe ingresar notas de 0 a 20")
+                            validacion_nota=0
                     print(notas)
                     contador=len(info_alumnos[0])
                 else:
@@ -198,20 +251,89 @@ class Seccion:
                 contador=contador+1
                 if (contador==len(info_alumnos[0])):
                     print("No existe el alumno")
-                
+    def accion_eliminar_modificar_nota(self,info_alumnos,contador,alumno,opcion):
+        validacion_nota=0 
+        while True:
+            os.system('cls')
+            print("Eliga la accion a realizar")
+            print ("\t1 - Eliminar nota")
+            print ("\t2 - Modificar nota")
+            print ("\t3 - Cancelar")
+            opcion1=input("Eliga una opcion ...\n")
+            int_opcion=int(opcion)   
+            if opcion1=="1":   
+                    info_alumnos[1][contador][int_opcion-1]=None
+                    print("Se elimino la nota del alumno ",alumno)
+                    time.sleep(8)
+            elif opcion1=="2":
+                while(validacion_nota==0):
+                    nueva_nota=int(input("Ingrese nueva nota"))
+                    if (nueva_nota in range(21)):
+                        antigua_nota=info_alumnos[1][contador][int_opcion-1]
+                        info_alumnos[1][contador][int_opcion-1]=nueva_nota 
+                        print("Se modifico la nota: "+str(antigua_nota)+" → "+str(info_alumnos[1][contador][int_opcion-1]))
+                        time.sleep(8)
+                        validacion_nota=1
+                    else:
+                        print("Nota no valida, debe ingresar notas de 0 a 20") 
+                validacion_nota=0 
+                print("Se modifico nota del alumno ",alumno)
+                time.sleep(8)
+            elif opcion1=="3":
+                break
+            else:
+                input("No has pulsado ninguna opción correcta...\npulsa una tecla para continuar")            
 
-    def ver_notas(self,info_alumnos,nombre):
+    """def ver_notas(self,info_alumnos,nombre):
         for j in range(len(info_alumnos[0])):
             if nombre==info_alumnos[0][j].nombre:
                 print("Notas del alumno "+nombre+" : ")
                 print(info_alumnos[1][j])
                 break
             elif (j==(len(info_alumnos[0])-1)):
-                print("No esta el alumno "+nombre)
+                print("No esta el alumno "+nombre)"""
 
     def ver_notas_seccion(self,info_alumnos,seccion):
         print("Notas de la sección "+str(seccion))
         print(info_alumnos[1])
+
+    def eliminar_modificar_notas(self,info_alumnos,x,alumno,lista_secciones):
+        vacio=[]
+        contador=0
+        while (contador!=len(info_alumnos[0])):
+            if alumno in info_alumnos[0][contador].nombre:
+                if(info_alumnos[1][contador]!=vacio):
+                    os.system('cls')
+                    print("Notas del alumno",alumno)
+                    print ("\t1 - pc1:",info_alumnos[1][contador][0])
+                    print ("\t2 - pc2:",info_alumnos[1][contador][1])
+                    print ("\t3 - pc3:",info_alumnos[1][contador][2])
+                    print ("\t4 - pc4:",info_alumnos[1][contador][3])
+                    print ("\t5 - parcial:",info_alumnos[1][contador][4])
+                    print ("\t6 - final:",info_alumnos[1][contador][5])
+                    print ("\t7 - Todas las notas")
+                    print ("\t9 - regresar")
+                    opcion=input("Eliga una opcion para eliminar/modificar...\n") 
+                    if opcion!="7":
+                        lista_secciones[x].accion_eliminar_modificar_nota(info_alumnos,contador,alumno,opcion)
+                    elif opcion=="7":
+                        continuar=input("Se eliminaran las notas del alumno "+alumno+". ¿Desea continuar? (1→SI / 0→NO):")  
+                        continuar_validacion=validacion_confirmación(continuar)
+                        if (continuar_validacion=='1'):
+                            for x in range(6):
+                                info_alumnos[1][contador][x]=None           
+                            print("Se eliminaron las notas del alumno "+alumno) 
+                    elif opcion=="9":
+                        contador=len(info_alumnos[0])
+                        break
+                    else:
+                        input("No has pulsado ninguna opción correcta...\npulsa una tecla para continuar")
+                else:
+                    print("No hay notas aun a modificar")
+            else:
+                contador=contador+1
+                if (contador==len(info_alumnos[0])):
+                    print ("No se encuentra el alumno "+alumno+" en la seccion")
 
     def inicializar_notas(self,columna,info_alumnos):    #inicializando las notas para que haya listas vacias en la columna notas (sino marca error)
         for j in range(len(info_alumnos[0])):
@@ -256,7 +378,6 @@ class Alumno:
             self.nombre=nombre
             self.nseccion=nseccion
             self.curso=curso
-
 
 class Notas:
     #info_alumnos[0][n]= Alumno(nombreAlumno,nseccion,curso)

@@ -1,149 +1,189 @@
 from re import X
-from turtle import pos
+from turtle import pos, position
 from uuid import NAMESPACE_URL
 from seccion import *
-lista_secciones=[]
+import os
 
-crear_seccion(lista_secciones)
 
-buscar_seccion(lista_secciones)
 
-cantidad_secciones=ver_secciones(lista_secciones)
+#crear_seccion(lista_secciones)
 
-#seccion1=Seccion(1,'Matemática','Echendia')
-#seccion2=Seccion(2,'Fisica','Tafur')
-print("Cantidad de secciones",cantidad_secciones)
+#buscar_seccion(lista_secciones)
 
 #agregar_alumno(self,info_alumnos,curso,nseccion):
-continuar_secciones=1
-#for x in range(cantidad_secciones):
-    #while (continuar_secciones!=0):
-condicion=1
+
+
 contador=0
 vacio=[]
-"""
-while (contador!=len(lista_secciones)):
-    nombre_seccion=input("Ponga el nombre/número de la seccion a poner notas: ") 
-    if nombre_seccion in lista_secciones[contador].nseccion:
-        if(lista_secciones[contador]==vacio):
-            print("Ingrese los alumnos de la seccion "+lista_secciones[contador].nseccion+": \n")
-            info_alumnos_listado=lista_secciones[contador].info_alumnos
-            curso_listado=lista_secciones[contador].curso
-            nombre_seccion_listado=lista_secciones[contador].nseccion
-            notas_min_pc_listado=lista_secciones[contador].notas_min_pc
+lista_secciones=[]
+lista_nombre_secciones=[]
+def menu():
 
-            lista_secciones[contador].agregar_alumno(info_alumnos_listado,curso_listado,nombre_seccion_listado)
-            lista_secciones[contador].ver_lista(info_alumnos_listado,nombre_seccion_listado)
+    os.system('cls') # NOTA para windows tienes que cambiar clear por cls
+    print("-----SALON V1-----")
+    print("Eliga una opción: \n")
+    print ("\t1 - Agregar/quitar seccion")#acabado 3/3
+    print ("\t2 - Agregar/quitar alumnos")#acabado 3/3
+    print ("\t3 - Agregar/modificar/eliminar/ver notas")
+    print ("\t9 - salir")
 
-            lista_secciones[contador].inicializar_notas(1,info_alumnos_listado)#1 para inicializar la columna de notas
-            lista_secciones[contador].inicializar_notas(2,info_alumnos_listado)#2 para inicializar la columna de nota final
-            lista_secciones[contador].inicializar_notas_min_pc(notas_min_pc_listado,info_alumnos_listado)#inicializa la nota mas baja de todas
-            c=1
-            while (c!=0):
-                alumno=input("Ingrese el nombre del alumno a asignar notas: ")
-                lista_secciones[contador].recibir_notas(info_alumnos_listado,alumno)
-                condicion_alumno=int(input(" ¿Ingresar otro? (1→SI / 0→NO) "))
-                c=condicion_alumno
-
-            lista_secciones[contador].ver_notas_seccion(info_alumnos_listado,nombre_seccion_listado)
-            lista_secciones[contador].promedio_alumnos(info_alumnos_listado,notas_min_pc_listado)
-            lista_secciones[contador].mayor_nota(info_alumnos_listado)
-            lista_secciones[contador].menor_nota(info_alumnos_listado) 
-            contador=len(lista_secciones)    
-        else:
-            print("Los datos de la seccion "+nombre_seccion+" ya fueron ingresadas")
-            print(lista_secciones[contador])  
-            contador=len(lista_secciones)
-    else:
-        contador=contador+1
-        if (contador==len(lista_secciones)):
-            print("No existe la seccion: ",nombre_seccion)
-
-"""
-while(condicion!=0 or contador!=len(lista_secciones)):
-    #nombre_seccion=input("Ponga el nombre/número de la seccion a poner notas: ") 
-    nombre_seccion=input("Ponga el nombre/número de la seccion a poner notas: ")
-    for x in range(cantidad_secciones):    
-        if (nombre_seccion == lista_secciones[x].nseccion):  
-            print(lista_secciones[x].nseccion)
-            if(lista_secciones[x].nseccion not in vacio):
-                print("Ingrese los alumnos de la seccion "+lista_secciones[x].nseccion+": \n")
-                info_alumnos_listado=lista_secciones[x].info_alumnos
-                curso_listado=lista_secciones[x].curso
-                nombre_seccion_listado=lista_secciones[x].nseccion
-                notas_min_pc_listado=lista_secciones[x].notas_min_pc
-
-                lista_secciones[x].agregar_alumno(info_alumnos_listado,curso_listado,nombre_seccion_listado)
-                lista_secciones[x].ver_lista(info_alumnos_listado,nombre_seccion_listado)
-
-                lista_secciones[x].inicializar_notas(1,info_alumnos_listado)#1 para inicializar la columna de notas
-                lista_secciones[x].inicializar_notas(2,info_alumnos_listado)#2 para inicializar la columna de nota final
-                lista_secciones[x].inicializar_notas_min_pc(notas_min_pc_listado,info_alumnos_listado)#inicializa la nota mas baja de todas
-                c=1
-                while (c!=0):
-                    alumno=input("Ingrese el nombre del alumno a asignar notas: ")
-                    lista_secciones[x].recibir_notas(info_alumnos_listado,alumno)
-                    condicion_alumno=int(input(" ¿Ingresar otro? (1→SI / 0→NO) "))
-                    c=condicion_alumno
-
-                lista_secciones[x].ver_notas_seccion(info_alumnos_listado,nombre_seccion_listado)
-                lista_secciones[x].promedio_alumnos(info_alumnos_listado,notas_min_pc_listado)
-                lista_secciones[x].mayor_nota(info_alumnos_listado)
-                lista_secciones[x].menor_nota(info_alumnos_listado)
-                vacio.append(nombre_seccion)
-                condicion=int(input("Desea poner datos de otra seccion (1→SI / 0→NO):"))
-                contador=len(lista_secciones)
+while True:
+# Mostramos el menu
+    menu()
+    # solicituamos una opción al usuario
+    opcionMenu = input("inserta un numero valor >> ")
+    if opcionMenu=="1":
+        while True:
+            print ("\t1 - Agregar seccion")#acabado
+            print ("\t2 - Quitar seccion")#acabado
+            print ("\t3 - Ver secciones")#acabado
+            print ("\t9 - Regresar")
+            opcion=input("Eliga una opcion...\n")
+            if opcion=="1":
+                os.system('cls')
+                crear_seccion(lista_secciones,lista_nombre_secciones)   
+            elif opcion=="2":
+                eliminar_seccion(lista_secciones,lista_nombre_secciones)
+            elif opcion=="3":
+                cantidad_secciones=ver_secciones(lista_secciones)
+                print("Cantidad de secciones",cantidad_secciones)
+            elif opcion=="9":
+                break
             else:
-                print("Los datos de la seccion "+nombre_seccion+" ya fueron ingresadas")
-                contador=len(lista_secciones)
-                #condicion=int(input("Desea poner datos de otra seccion (1→SI / 0→NO):"))
-        else:
-            if ((x+1)==len(lista_secciones)):
-                print("La seccion no existe")
-                condicion=int(input("Desea poner datos de otra seccion (1→SI / 0→NO):"))
-            #continuar_secciones=int(input(" ¿Ingresar datos de otra seccion? (1→SI / 0→NO) "))
+                input("No has pulsado ninguna opción correcta...\npulsa una tecla para continuar") 
+    elif opcionMenu=="2":
+        while True:
+            os.system('cls')
+            print ("\t1 - Agregar alumno")#acabado
+            print ("\t2 - Quitar alumno")#
+            print ("\t3 - Ver lista alumnos")#acabado
+            print ("\t9 - Regresar")
+            opcion=input("Eliga una opcion...\n")
+            if opcion=="1":#Agregar alumno, acabado
+                os.system('cls')
+                condicion_opcion1='1'
+                while(condicion_opcion1!='0'):
+                    nombre_seccion=input("Ponga el nombre/número de la seccion a poner alunmos: ")
+                    for x in range(len(lista_secciones)):
+                        if nombre_seccion == lista_secciones[x].nseccion:
+                            #if (nombre_seccion not in vacio):
+                                print("Ingrese los alumnos de la seccion "+lista_secciones[x].nseccion+": \n")
+                                info_alumnos_listado=lista_secciones[x].info_alumnos#
+                                curso_listado=lista_secciones[x].curso#
+                                nombre_seccion_listado=lista_secciones[x].nseccion#
+                                lista_nombres_listado=lista_secciones[x].lista_nombres#
 
-"""n=1
-seccion1.agregar_alumno(a,'Matemática',n)
-seccion1.ver_lista(a,n)
-seccion=input("Ingrese la seccion a poner nota → Seccion: ")
-m=2
-seccion2.agregar_alumno(seccion2.info_alumnos,'Fisica',m)
-seccion2.ver_lista(seccion2.info_alumnos,m)
+                                lista_secciones[x].agregar_alumno(info_alumnos_listado,curso_listado,nombre_seccion_listado,lista_nombres_listado)
+                                cond=input("Desea buscar de otra seccion (1→SI / 0→NO):")
+                                condicion_opcion1=validacion_confirmación(cond)
+                                break
+                        else :
+                            if ((x+1)==len(lista_secciones)):
+                                print("La seccion no existe")
+                                cond=input("Desea buscar otra seccion (1→SI / 0→NO):")
+                                condicion_opcion1=validacion_confirmación(cond)
+            elif opcion=="2":#Quitar alumno,arreglado y acabado
+                os.system('cls')
+                condicion_opcion2='1'
+                while(condicion_opcion2!='0'):
+                    nombre_seccion=input("Ponga el nombre/número de la seccion: ")
+                    for x in range(len(lista_secciones)):
+                        if nombre_seccion == lista_secciones[x].nseccion:
+                            lista_secciones[x].quitar_alumno(info_alumnos_listado,lista_nombres_listado,x,lista_secciones)
+                            #print("Alumno eliminado de la seccion ",nombre_seccion)
+                            cond=input("Desea buscar de otra seccion (1→SI / 0→NO):")
+                            condicion_opcion2=validacion_confirmación(cond)
+                            break
+                        else :
+                            if ((x+1)==len(lista_secciones)):
+                                print("La seccion no existe")
+                                cond=input("Desea buscar otra seccion (1→SI / 0→NO):")
+                                condicion_opcion2=validacion_confirmación(cond)
 
-seccion1.inicializar_notas(1,seccion1.info_alumnos)#1 para inicializar la columna de notas
-seccion1.inicializar_notas(2,seccion1.info_alumnos)#2 para inicializar la columna de nota final
-seccion1.inicializar_notas_min_pc(seccion1.notas_min_pc,seccion1.info_alumnos)#inicializa la nota mas baja de todas
+            elif opcion=="3":#Ver lista alumnos, acabado
+                condicion_opcion3='1'
+                os.system('cls')
+                while(condicion_opcion3!='0'):
+                    nombre_seccion=input("Ponga el nombre/número de la seccion: ")
+                    for x in range(len(lista_secciones)):
+                        if nombre_seccion == lista_secciones[x].nseccion:
+                            lista_secciones[x].ver_lista(info_alumnos_listado,nombre_seccion,x,lista_secciones)
+                            cond=input("Desea buscar otra seccion (1→SI / 0→NO):")
+                            condicion_opcion3=validacion_confirmación(cond)
+                            break
+                        else :
+                            if ((x+1)==len(lista_secciones)):
+                                print("La seccion no existe")
+                                cond=input("Desea buscar otra seccion (1→SI / 0→NO):")
+                                condicion_opcion3=validacion_confirmación(cond)
+            elif opcion=="9":
+                break
+            else:
+                input("No has pulsado ninguna opción correcta...\npulsa una tecla para continuar")
+    elif opcionMenu=="3":
+        while True:
+            os.system('cls')
+            print ("\t1 - Agregar/ver nota alumno")
+            print ("\t2 - Eliminar nota alumno")
+            print ("\t9 - Regresar")
+            opcion=input("Eliga una opcion...\n")
+            if opcion=="1":#Agregar/ver nota alumno
+                condicion='1'
+                while(condicion!='0'):
+                    nombre_seccion=input("Ponga el nombre/número de la seccion a poner notas")
+                    for x in range(len(lista_secciones)):
+                        if nombre_seccion == lista_secciones[x].nseccion:
+                            print("Ingrese los alumnos de la seccion "+lista_secciones[x].nseccion+": \n")
+                            notas_min_pc_listado=lista_secciones[x].notas_min_pc
+                            lista_secciones[x].inicializar_notas(1,info_alumnos_listado)#1 para inicializar la columna de notas
+                            lista_secciones[x].inicializar_notas(2,info_alumnos_listado)#2 para inicializar la columna de nota final
+                            lista_secciones[x].inicializar_notas_min_pc(notas_min_pc_listado,info_alumnos_listado)#inicializa la nota mas baja de todas
+                            c='1'
 
-seccion2.inicializar_notas(1,seccion2.info_alumnos)#1 para inicializar la columna de notas
-seccion2.inicializar_notas(2,seccion2.info_alumnos)#2 para inicializar la columna de nota final
-seccion2.inicializar_notas_min_pc(seccion2.notas_min_pc,seccion2.info_alumnos)#inicializa la nota mas baja de todas
-c=1
+                            while (c!='0'):
+                                alumno=input("Ingrese el nombre del alumno a asignar notas: ")
+                                lista_secciones[x].recibir_notas(info_alumnos_listado,alumno)
+                                condicion_alumno=input(" ¿Ingresar otro? (1→SI / 0→NO) ")
+                                c=validacion_confirmación(condicion_alumno)
 
+                            lista_secciones[x].ver_notas_seccion(info_alumnos_listado,nombre_seccion_listado)
+                            cond=input("Desea buscar otra seccion (1→SI / 0→NO):")
+                            condicion=validacion_confirmación(cond)
+                            break
+                        else :
+                            if ((x+1)==len(lista_secciones)):
+                                print("La seccion no existe")
+                                cond=input("Desea buscar otra seccion (1→SI / 0→NO):")
+                                condicion=validacion_confirmación(cond)
+            elif opcion=="2":#Eliminar nota alumno
+                os.system('cls')
+                condicion_opcion2='1'
+                c='1'
+                while(condicion_opcion2!='0'):
+                    nombre_seccion=input("Ponga el nombre/número de la seccion: ")
+                    for x in range(len(lista_secciones)):
+                        if nombre_seccion == lista_secciones[x].nseccion:
+                            while (c!='0'):
+                                print("valor de x ",x)
+                                alumno=input("Ingrese el nombre del alumno a modificar nota: ")
+                                lista_secciones[x].eliminar_modificar_notas(info_alumnos_listado,x,alumno,lista_secciones)
+                                condicion_alumno=input(" ¿Ingresar otro? (1→SI / 0→NO) ")
+                                c=validacion_confirmación(condicion_alumno)
+                            cond=input("Desea modificar de otra seccion (1→SI / 0→NO):")
+                            condicion_opcion2=validacion_confirmación(cond)
+                            break
+                        else :
+                            if ((x+1)==len(lista_secciones)):
+                                print("La seccion no existe")
+                                cond=input("Desea buscar otra seccion (1→SI / 0→NO):")
+                                condicion_opcion2=validacion_confirmación(cond)
+            elif opcion=="9":
+                break
+            else:
+                input("No has pulsado ninguna opción correcta...\npulsa una tecla para continuar")
 
-print("Seccion 1")
-while (c!=0):
-    alumno=input("Ingrese el nombre del alumno a asignar notas: ")
-    seccion1.recibir_notas(seccion1.info_alumnos,alumno)
-    condicion=int(input(" ¿Ingresar otro? (1→SI / 0→NO) "))
-    c=condicion
-
-seccion1.ver_notas_seccion(seccion1.info_alumnos,1)
-seccion1.promedio_alumnos(seccion1.info_alumnos,seccion1.notas_min_pc)
-seccion1.mayor_nota(seccion1.info_alumnos)
-seccion1.menor_nota(seccion1.info_alumnos)
-
-c=1
-print("Seccion 2")
-while (c!=0):
-    alumno=input("Ingrese el nombre del alumno a asignar notas: ")
-    seccion2.recibir_notas(seccion2.info_alumnos,alumno)
-    condicion=int(input(" ¿Ingresar otro? (1→SI / 0→NO) "))
-    c=condicion
-
-
-seccion2.ver_notas_seccion(seccion2.info_alumnos,2)
-
-seccion2.promedio_alumnos(seccion2.info_alumnos,seccion2.notas_min_pc)
-seccion2.mayor_nota(seccion2.info_alumnos)
-seccion2.menor_nota(seccion2.info_alumnos) """
+    elif opcionMenu=="9":
+        break
+    else:
+        print ("")
+        input("No has pulsado ninguna opción correcta...\npulsa una tecla para continuar")

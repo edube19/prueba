@@ -284,15 +284,6 @@ class Seccion:
             else:
                 input("No has pulsado ninguna opción correcta...\npulsa una tecla para continuar")            
 
-    """def ver_notas(self,info_alumnos,nombre):
-        for j in range(len(info_alumnos[0])):
-            if nombre==info_alumnos[0][j].nombre:
-                print("Notas del alumno "+nombre+" : ")
-                print(info_alumnos[1][j])
-                break
-            elif (j==(len(info_alumnos[0])-1)):
-                print("No esta el alumno "+nombre)"""
-
     def ver_notas_seccion(self,info_alumnos,seccion):
         print("Notas de la sección "+str(seccion))
         print(info_alumnos[1])
@@ -320,16 +311,18 @@ class Seccion:
                         continuar=input("Se eliminaran las notas del alumno "+alumno+". ¿Desea continuar? (1→SI / 0→NO):")  
                         continuar_validacion=validacion_confirmación(continuar)
                         if (continuar_validacion=='1'):
-                            for x in range(6):
-                                info_alumnos[1][contador][x]=None           
+                            for j in range(6):
+                                info_alumnos[1][contador][j]=None           
                             print("Se eliminaron las notas del alumno "+alumno) 
                     elif opcion=="9":
                         contador=len(info_alumnos[0])
                         break
                     else:
                         input("No has pulsado ninguna opción correcta...\npulsa una tecla para continuar")
+                    break
                 else:
                     print("No hay notas aun a modificar")
+                    break
             else:
                 contador=contador+1
                 if (contador==len(info_alumnos[0])):
@@ -345,34 +338,31 @@ class Seccion:
                 notas=[]
                 notas_min_pc.append(notas)
 
-    def promedio_alumnos(self,info_alumnos,notas_min_pc):
-        #minimo=min(info_alumnos)
-        #menor=20
+    def promedio_alumnos(self,info_alumnos,alumno):
         min_valor=[]
         vacio=[]
-        for i in range(len(info_alumnos[0])):
-            if info_alumnos[1][i]!=vacio:
+        contador=0
+        while (contador!=len(info_alumnos[0])):
+            if alumno in info_alumnos[0][contador].nombre:
                 for j in range(4):#lee las 4 primeras notas
-                    a=info_alumnos[1][i][j]
+                    a=info_alumnos[1][contador][j]
                     min_valor.append(a)
-                menor=min(min_valor)
-                notas_min_pc[i]=menor
-                min_valor=[]
-        
-        #poniendo las notas finales de cada alumno
-        notapcs=0
-        for x in range(len(info_alumnos[0])):  
-            if info_alumnos[1][x]!=vacio:
-                for j in range(4):
-                    if info_alumnos[1][x][j]==notas_min_pc[x]:#no lee la nota menor
-                        notapcs=notapcs
-                    else:
-                        notapcs=info_alumnos[1][x][j]+notapcs
-                notapcs=notapcs/3
-                info_alumnos[2][x]=(notapcs+info_alumnos[1][x][4]+info_alumnos[1][x][5])/3#alumnos[1][x][4]→parcial, alumnos[1][x][5]→final
-                print("Promedio final del alumno "+str(info_alumnos[0][x].nombre)+" es: "+str(info_alumnos[2][x]))
+                menor=min(min_valor) 
                 notapcs=0
-
+                if info_alumnos[1][contador]!=vacio:
+                    for j in range(4):
+                        if (info_alumnos[1][contador][j]==menor or info_alumnos[1][contador][j]==None):#no lee la nota menor o notas vacias (None)
+                            notapcs=notapcs
+                        else:
+                            notapcs=info_alumnos[1][contador][j]+notapcs
+                    notapcs=notapcs/3
+                    info_alumnos[2][contador]=round((notapcs+info_alumnos[1][contador][4]+info_alumnos[1][contador][5])/3,2)#alumnos[1][x][4]→parcial, alumnos[1][x][5]→final
+                    print("Promedio final del alumno "+str(info_alumnos[0][contador].nombre)+" es: "+str(info_alumnos[2][contador]))
+                    contador=len(info_alumnos[0])   
+            else:
+                contador=contador+1
+                if (contador==len(info_alumnos[0])):
+                    print ("No se encuentra el alumno "+alumno+" en la seccion")
 class Alumno:
     def __init__(self,nombre,nseccion,curso):
             self.nombre=nombre
